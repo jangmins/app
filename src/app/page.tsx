@@ -12,6 +12,11 @@ interface GoalItem {
   amount: number;
 }
 
+interface SavingItem {
+  name: string;
+  amount: number;
+}
+
 interface MonthlySaving {
   month: string;
   savedAmount: number;
