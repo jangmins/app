@@ -3,151 +3,145 @@
 import { useState } from 'react';
 import Navbar from '../components/Navbar';
 import { useDarkMode } from '../context/DarkModeContext';
-
-interface TodaySaving {
-  date: string;
-  items: {
-    name: string;
-    amount: number;
-  }[];
-}
+import { useAppTitle } from '../context/AppTitleContext';
+import { useSavings } from '../context/SavingsContext';
 
 export default function TodayPage() {
-  const [todaySaving, setTodaySaving] = useState<TodaySaving>({
-    date: new Date().toISOString().split('T')[0],
-    items: [],
-  });
-
   const { isDarkMode } = useDarkMode();
+  const { appTitle } = useAppTitle();
+  const { monthlySavings, addSaving } = useSavings();
+  const [savingName, setSavingName] = useState('');
+  const [savingAmount, setSavingAmount] = useState('');
 
-  const [newItem, setNewItem] = useState({
-    name: '',
-    amount: '',
-  });
+  const currentMonth = new Date().toISOString().slice(0, 7);
+  const today = new Date().toISOString().split('T')[0];
+  const currentMonthSavings = monthlySavings.find(saving => saving.month === currentMonth) || {
+    month: currentMonth,
+    savedAmount: 0,
+    goal: 0,
+    items: []
+  };
 
-  const handleAddItem = () => {
-    if (newItem.name && newItem.amount) {
-      setTodaySaving({
-        ...todaySaving,
-        items: [
-          ...todaySaving.items,
-          {
-            name: newItem.name,
-            amount: parseInt(newItem.amount),
-          },
-        ],
-      });
-      setNewItem({ name: '', amount: '' });
+  const todaySavings = currentMonthSavings.items.filter(item => item.date === today);
+
+  const handleAddSaving = () => {
+    if (savingName && savingAmount) {
+      const newSaving = {
+        name: savingName,
+        amount: parseInt(savingAmount),
+        date: today,
+      };
+      addSaving(newSaving);
+      setSavingName('');
+      setSavingAmount('');
+      alert('저축이 성공적으로 저장되었습니다!');
     }
   };
 
-  const totalAmount = todaySaving.items.reduce((sum, item) => sum + item.amount, 0);
-
   return (
-    <div className={`min-h-screen ${
+    <div className={`min-h-screen pt-16 ${
       isDarkMode 
-        ? 'bg-gradient-to-b from-gray-950 via-amber-950 to-gray-900' 
-        : 'bg-gradient-to-b from-amber-50 via-amber-100 to-white'
+        ? 'bg-gradient-to-b from-gray-950 via-orange-950 to-gray-900' 
+        : 'bg-gradient-to-b from-orange-100 via-orange-200 to-white'
     }`}>
       <Navbar />
-      <main className="p-8">
-        <div className="max-w-2xl mx-auto">
-          <h1 className={`text-4xl font-bold mb-8 text-center ${isDarkMode ? 'text-amber-200' : 'text-amber-800'}`}>티끌모아태산</h1>
-          <h2 className={`text-2xl font-semibold mb-4 text-center ${isDarkMode ? 'text-amber-100' : 'text-amber-700'}`}>오늘의 저축</h2>
+      <main className="p-4">
+        <div className="max-w-md mx-auto">
+          <div className="flex justify-center mb-4">
+            <div className={`inline-block px-4 py-2 rounded-xl border-2 ${
+              isDarkMode ? 'bg-orange-950 border-orange-800 text-orange-100' : 'bg-orange-200 border-orange-400 text-orange-900'
+            }`}>
+              <h1 className={`text-xl font-semibold text-center`}>{appTitle}</h1>
+            </div>
+          </div>
 
-          <div className={`p-6 rounded-xl shadow-lg border ${
-            isDarkMode ? 'bg-gray-800 border-amber-800' : 'bg-white border-amber-100'
-          } mb-6`}>
-            <h3 className={`text-xl font-semibold mb-4 ${isDarkMode ? 'text-amber-200' : 'text-amber-700'}`}>절약 항목 추가</h3>
+          <div className={`p-6 rounded-xl shadow-lg border mb-4 ${
+            isDarkMode ? 'bg-gray-800 border-orange-950' : 'bg-white border-orange-200'
+          }`}>
+            <h2 className={`text-2xl font-bold mb-4 ${isDarkMode ? 'text-orange-200' : 'text-orange-900'}`}>오늘의 저축</h2>
+            
             <div className="space-y-4">
-              <input
-                type="text"
-                value={newItem.name}
-                onChange={(e) => setNewItem({ ...newItem, name: e.target.value })}
-                className={`w-full border-2 p-3 rounded-lg focus:outline-none ${
-                  isDarkMode 
-                    ? 'bg-gray-700 border-amber-700 text-white placeholder-gray-400 focus:border-amber-500' 
-                    : 'border-amber-200 focus:border-amber-500'
-                }`}
-                placeholder="절약할 품목을 입력하세요 (예: 커피, 배달음식 등)"
-              />
-              <div className="flex gap-4">
+              <div>
+                <label className={`block mb-2 ${isDarkMode ? 'text-orange-200' : 'text-orange-900'}`}>
+                  절약 항목
+                </label>
+                <input
+                  type="text"
+                  value={savingName}
+                  onChange={(e) => setSavingName(e.target.value)}
+                  className={`w-full p-2 rounded-lg border ${
+                    isDarkMode 
+                      ? 'bg-gray-700 border-orange-900 text-white' 
+                      : 'bg-white border-orange-300 text-gray-900'
+                  }`}
+                  placeholder="절약한 항목을 입력하세요"
+                />
+              </div>
+              
+              <div>
+                <label className={`block mb-2 ${isDarkMode ? 'text-orange-200' : 'text-orange-900'}`}>
+                  절약 금액
+                </label>
                 <input
                   type="number"
-                  value={newItem.amount}
-                  onChange={(e) => setNewItem({ ...newItem, amount: e.target.value })}
-                  className={`border-2 p-3 rounded-lg flex-1 focus:outline-none ${
+                  value={savingAmount}
+                  onChange={(e) => setSavingAmount(e.target.value)}
+                  className={`w-full p-2 rounded-lg border ${
                     isDarkMode 
-                      ? 'bg-gray-700 border-amber-700 text-white placeholder-gray-400 focus:border-amber-500' 
-                      : 'border-amber-200 focus:border-amber-500'
+                      ? 'bg-gray-700 border-orange-900 text-white' 
+                      : 'bg-white border-orange-300 text-gray-900'
                   }`}
-                  placeholder="절약할 금액을 입력하세요"
+                  placeholder="절약한 금액을 입력하세요"
                 />
-                <button
-                  onClick={handleAddItem}
-                  className={`px-6 py-3 rounded-lg font-semibold transition-all duration-300 ${
-                    isDarkMode
-                      ? 'bg-gradient-to-r from-amber-600 to-amber-700 text-amber-50 hover:from-amber-700 hover:to-amber-800'
-                      : 'bg-gradient-to-r from-amber-600 to-amber-700 text-white hover:from-amber-700 hover:to-amber-800'
-                  }`}
-                >
-                  추가하기
-                </button>
               </div>
-            </div>
-          </div>
 
-          <div className={`p-6 rounded-xl shadow-lg border ${
-            isDarkMode ? 'bg-gray-800 border-amber-800' : 'bg-white border-amber-100'
-          } mb-6`}>
-            <div className="flex justify-between items-center mb-4">
-              <h3 className={`text-xl font-semibold ${isDarkMode ? 'text-amber-200' : 'text-amber-700'}`}>오늘의 절약</h3>
-              <p className={`text-2xl font-bold ${isDarkMode ? 'text-amber-200' : 'text-amber-600'}`}>
-                {totalAmount.toLocaleString()}원
-              </p>
-            </div>
-            <div className={`w-full rounded-full h-4 overflow-hidden ${isDarkMode ? 'bg-amber-900' : 'bg-amber-100'}`}>
-              <div
-                className={`h-4 rounded-full animate-flowing ${
-                  isDarkMode
-                    ? 'bg-gradient-to-r from-amber-500 via-amber-400 to-amber-500'
-                    : 'bg-gradient-to-r from-amber-500 via-amber-600 to-amber-500'
+              <button
+                onClick={handleAddSaving}
+                className={`w-full py-2 rounded-lg ${
+                  isDarkMode 
+                    ? 'bg-orange-600 text-white hover:bg-orange-700' 
+                    : 'bg-orange-500 text-white hover:bg-orange-600'
                 }`}
-                style={{ width: '100%' }}
-              ></div>
+              >
+                저장하기
+              </button>
             </div>
-            <p className={`text-sm mt-2 text-right ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>
-              오늘 절약한 금액: {totalAmount.toLocaleString()}원
-            </p>
           </div>
 
           <div className={`p-6 rounded-xl shadow-lg border ${
-            isDarkMode ? 'bg-gray-800 border-amber-800' : 'bg-white border-amber-100'
+            isDarkMode ? 'bg-gray-800 border-orange-950' : 'bg-white border-orange-200'
           }`}>
-            <h3 className={`text-xl font-semibold mb-4 ${isDarkMode ? 'text-amber-200' : 'text-amber-700'}`}>절약 항목</h3>
-            <div className="space-y-4">
-              {todaySaving.items.map((item, index) => (
-                <div
-                  key={index}
-                  className={`flex justify-between items-center p-3 rounded-lg ${
-                    isDarkMode ? 'bg-amber-900/50' : 'bg-amber-50'
-                  }`}
-                >
-                  <div>
-                    <p className={`${isDarkMode ? 'text-amber-100' : 'text-amber-800'}`}>{item.name}</p>
-                    <p className={`text-sm ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>{item.amount.toLocaleString()}원</p>
+            <h2 className={`text-2xl font-bold mb-4 ${isDarkMode ? 'text-orange-200' : 'text-orange-900'}`}>
+              오늘의 저축 내역
+            </h2>
+            <div className="space-y-2">
+              {todaySavings.length > 0 ? (
+                todaySavings.map((item, index) => (
+                  <div
+                    key={index}
+                    className={`p-3 rounded-lg ${
+                      isDarkMode ? 'bg-gray-700' : 'bg-orange-50'
+                    }`}
+                  >
+                    <div className="flex justify-between items-center">
+                      <span className={`font-medium ${isDarkMode ? 'text-orange-200' : 'text-orange-900'}`}>
+                        {item.name}
+                      </span>
+                      <span className={`font-bold ${isDarkMode ? 'text-orange-200' : 'text-orange-900'}`}>
+                        {item.amount.toLocaleString()}원
+                      </span>
+                    </div>
                   </div>
-                  <span className={`px-3 py-1 rounded-full text-sm ${
-                    isDarkMode ? 'bg-green-900/50 text-green-200' : 'bg-green-100 text-green-600'
-                  }`}>
-                    절약 완료
-                  </span>
+                ))
+              ) : (
+                <div className={`text-center py-4 ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
+                  오늘의 저축 내역이 없습니다.
                 </div>
-              ))}
+              )}
             </div>
           </div>
         </div>
       </main>
     </div>
   );
-} 
+}
