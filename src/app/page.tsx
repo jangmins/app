@@ -4,7 +4,6 @@ import { useState } from 'react';
 import Navbar from './components/Navbar';
 import { GiftIcon } from '@heroicons/react/24/outline';
 import { useDarkMode } from './context/DarkModeContext';
-import Link from 'next/link';
 import { useAppTitle } from './context/AppTitleContext';
 
 interface GoalItem {
@@ -15,13 +14,6 @@ interface GoalItem {
 interface SavingItem {
   name: string;
   amount: number;
-}
-
-interface MonthlySaving {
-  month: string;
-  savedAmount: number;
-  goal: number;
-  items: SavingItem[];
 }
 
 interface DailySaving {
@@ -44,17 +36,6 @@ export default function HomePage() {
     name: '',
     amount: '',
   });
-
-  const [dailySavings] = useState<DailySaving[]>([
-    {
-      date: '2024-03-15',
-      items: [
-        { name: '커피 절약', amount: 15000 },
-        { name: '배달음식 절약', amount: 20000 },
-      ],
-    },
-    // ... 나머지 데이터는 그대로 유지
-  ]);
 
   const handleSetGoal = () => {
     if (newGoal.name && newGoal.amount) {
