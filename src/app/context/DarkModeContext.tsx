@@ -1,29 +1,22 @@
 'use client';
 
-import { createContext, useContext, useState, useEffect } from 'react';
+import { createContext, useContext, useState, ReactNode } from 'react';
 
 interface DarkModeContextType {
   isDarkMode: boolean;
   toggleDarkMode: () => void;
 }
 
-const DarkModeContext = createContext<DarkModeContextType | undefined>(undefined);
+const DarkModeContext = createContext<DarkModeContextType>({
+  isDarkMode: false,
+  toggleDarkMode: () => {},
+});
 
-export function DarkModeProvider({ children }: { children: React.ReactNode }) {
+export function DarkModeProvider({ children }: { children: ReactNode }) {
   const [isDarkMode, setIsDarkMode] = useState(false);
 
-  useEffect(() => {
-    // Check if user has a dark mode preference in localStorage
-    const savedDarkMode = localStorage.getItem('darkMode');
-    if (savedDarkMode) {
-      setIsDarkMode(savedDarkMode === 'true');
-    }
-  }, []);
-
   const toggleDarkMode = () => {
-    const newDarkMode = !isDarkMode;
-    setIsDarkMode(newDarkMode);
-    localStorage.setItem('darkMode', String(newDarkMode));
+    setIsDarkMode(!isDarkMode);
   };
 
   return (
@@ -34,9 +27,5 @@ export function DarkModeProvider({ children }: { children: React.ReactNode }) {
 }
 
 export function useDarkMode() {
-  const context = useContext(DarkModeContext);
-  if (context === undefined) {
-    throw new Error('useDarkMode must be used within a DarkModeProvider');
-  }
-  return context;
+  return useContext(DarkModeContext);
 } 

@@ -7,7 +7,10 @@ interface AppTitleContextType {
   setAppTitle: (title: string) => void;
 }
 
-const AppTitleContext = createContext<AppTitleContextType | undefined>(undefined);
+const AppTitleContext = createContext<AppTitleContextType>({
+  appTitle: '티끌모아태산',
+  setAppTitle: () => {},
+});
 
 export function AppTitleProvider({ children }: { children: ReactNode }) {
   const [appTitle, setAppTitle] = useState('티끌모아태산');
@@ -20,9 +23,5 @@ export function AppTitleProvider({ children }: { children: ReactNode }) {
 }
 
 export function useAppTitle() {
-  const context = useContext(AppTitleContext);
-  if (context === undefined) {
-    throw new Error('useAppTitle must be used within an AppTitleProvider');
-  }
-  return context;
+  return useContext(AppTitleContext);
 } 

@@ -39,57 +39,65 @@ export default function TodayPage() {
   };
 
   return (
-    <div className={`min-h-screen pt-16 ${
+    <div className={`min-h-screen pt-20 ${
       isDarkMode 
-        ? 'bg-gradient-to-b from-gray-950 via-orange-950 to-gray-900' 
-        : 'bg-gradient-to-b from-orange-100 via-orange-200 to-white'
+        ? 'bg-gradient-to-b from-gray-950 via-amber-950 to-gray-900' 
+        : 'bg-gradient-to-b from-amber-100 via-amber-200 to-white'
     }`}>
       <Navbar />
       <main className="p-4">
         <div className="max-w-md mx-auto">
-          <div className="flex justify-center mb-4">
+          <h2 className={`text-2xl font-bold mb-4 text-center ${
+            isDarkMode ? 'text-amber-200' : 'text-amber-900'
+          }`}>오늘의 저축</h2>
+
+          <div className="flex justify-center mb-6">
             <div className={`inline-block px-4 py-2 rounded-xl border-2 ${
-              isDarkMode ? 'bg-orange-950 border-orange-800 text-orange-100' : 'bg-orange-200 border-orange-400 text-orange-900'
+              isDarkMode 
+                ? 'bg-amber-950/40 border-amber-700 text-amber-100' 
+                : 'bg-amber-100/60 border-amber-200 text-amber-800'
             }`}>
-              <h1 className={`text-xl font-semibold text-center`}>{appTitle}</h1>
+              <h1 className="text-xl font-semibold text-center">{appTitle}</h1>
             </div>
           </div>
 
-          <div className={`p-6 rounded-xl shadow-lg border mb-4 ${
-            isDarkMode ? 'bg-gray-800 border-orange-950' : 'bg-white border-orange-200'
+          <div className={`p-6 rounded-xl shadow-lg border mb-6 ${
+            isDarkMode 
+              ? 'bg-gray-800/50 border-amber-900' 
+              : 'bg-white/70 border-amber-200'
           }`}>
-            <h2 className={`text-2xl font-bold mb-4 ${isDarkMode ? 'text-orange-200' : 'text-orange-900'}`}>오늘의 저축</h2>
+            <h2 className={`text-2xl font-bold mb-4 ${isDarkMode ? 'text-purple-200' : 'text-purple-900'}`}>오늘의 저축</h2>
             
             <div className="space-y-4">
               <div>
-                <label className={`block mb-2 ${isDarkMode ? 'text-orange-200' : 'text-orange-900'}`}>
+                <label className={`block mb-2 ${isDarkMode ? 'text-purple-200' : 'text-purple-900'}`}>
                   절약 항목
                 </label>
                 <input
                   type="text"
                   value={savingName}
                   onChange={(e) => setSavingName(e.target.value)}
-                  className={`w-full p-2 rounded-lg border ${
+                  className={`w-full p-2 rounded-lg mb-4 ${
                     isDarkMode 
-                      ? 'bg-gray-700 border-orange-900 text-white' 
-                      : 'bg-white border-orange-300 text-gray-900'
+                      ? 'bg-gray-700 border-amber-800 text-amber-100' 
+                      : 'bg-amber-50 border-amber-200 text-amber-900'
                   }`}
                   placeholder="절약한 항목을 입력하세요"
                 />
               </div>
               
               <div>
-                <label className={`block mb-2 ${isDarkMode ? 'text-orange-200' : 'text-orange-900'}`}>
+                <label className={`block mb-2 ${isDarkMode ? 'text-purple-200' : 'text-purple-900'}`}>
                   절약 금액
                 </label>
                 <input
                   type="number"
                   value={savingAmount}
                   onChange={(e) => setSavingAmount(e.target.value)}
-                  className={`w-full p-2 rounded-lg border ${
+                  className={`w-full p-2 rounded-lg mb-4 ${
                     isDarkMode 
-                      ? 'bg-gray-700 border-orange-900 text-white' 
-                      : 'bg-white border-orange-300 text-gray-900'
+                      ? 'bg-gray-700 border-amber-800 text-amber-100' 
+                      : 'bg-amber-50 border-amber-200 text-amber-900'
                   }`}
                   placeholder="절약한 금액을 입력하세요"
                 />
@@ -97,10 +105,10 @@ export default function TodayPage() {
 
               <button
                 onClick={handleAddSaving}
-                className={`w-full py-2 rounded-lg ${
+                className={`px-4 py-2 rounded-lg ${
                   isDarkMode 
-                    ? 'bg-orange-600 text-white hover:bg-orange-700' 
-                    : 'bg-orange-500 text-white hover:bg-orange-600'
+                    ? 'bg-amber-800 text-amber-100 hover:bg-amber-700' 
+                    : 'bg-amber-500 text-white hover:bg-amber-600'
                 }`}
               >
                 저장하기
@@ -109,9 +117,9 @@ export default function TodayPage() {
           </div>
 
           <div className={`p-6 rounded-xl shadow-lg border ${
-            isDarkMode ? 'bg-gray-800 border-orange-950' : 'bg-white border-orange-200'
+            isDarkMode ? 'bg-gray-800 border-purple-950' : 'bg-white border-purple-200'
           }`}>
-            <h2 className={`text-2xl font-bold mb-4 ${isDarkMode ? 'text-orange-200' : 'text-orange-900'}`}>
+            <h2 className={`text-2xl font-bold mb-4 ${isDarkMode ? 'text-purple-200' : 'text-purple-900'}`}>
               오늘의 저축 내역
             </h2>
             <div className="space-y-2">
@@ -120,14 +128,14 @@ export default function TodayPage() {
                   <div
                     key={index}
                     className={`p-3 rounded-lg ${
-                      isDarkMode ? 'bg-gray-700' : 'bg-orange-50'
+                      isDarkMode ? 'bg-gray-700' : 'bg-purple-50'
                     }`}
                   >
                     <div className="flex justify-between items-center">
-                      <span className={`font-medium ${isDarkMode ? 'text-orange-200' : 'text-orange-900'}`}>
+                      <span className={`font-medium ${isDarkMode ? 'text-purple-200' : 'text-purple-900'}`}>
                         {item.name}
                       </span>
-                      <span className={`font-bold ${isDarkMode ? 'text-orange-200' : 'text-orange-900'}`}>
+                      <span className={`font-bold ${isDarkMode ? 'text-purple-200' : 'text-purple-900'}`}>
                         {item.amount.toLocaleString()}원
                       </span>
                     </div>

@@ -39,7 +39,7 @@ export default function PointsPage() {
   ];
 
   return (
-    <div className={`min-h-screen pt-16 ${
+    <div className={`min-h-screen pt-20 ${
       isDarkMode 
         ? 'bg-gradient-to-b from-gray-950 via-green-950 to-gray-900' 
         : 'bg-gradient-to-b from-green-100 via-green-200 to-white'
@@ -47,25 +47,38 @@ export default function PointsPage() {
       <Navbar />
       <main className="p-4">
         <div className="max-w-md mx-auto">
-          <h2 className={`text-2xl font-bold mb-4 text-center ${isDarkMode ? 'text-green-200' : 'text-green-900'}`}>포인트</h2>
-          <div className="flex justify-center mb-4">
+          <h2 className={`text-2xl font-bold mb-4 text-center ${
+            isDarkMode ? 'text-green-200' : 'text-green-900'
+          }`}>포인트</h2>
+
+          <div className="flex justify-center mb-6">
             <div className={`inline-block px-4 py-2 rounded-xl border-2 ${
-              isDarkMode ? 'bg-green-950 border-green-800 text-green-100' : 'bg-green-200 border-green-400 text-green-900'
+              isDarkMode 
+                ? 'bg-green-950/40 border-green-700 text-green-100' 
+                : 'bg-green-100/60 border-green-200 text-green-800'
             }`}>
-              <h1 className={`text-xl font-semibold text-center`}>{appTitle}</h1>
+              <h1 className="text-xl font-semibold text-center">{appTitle}</h1>
             </div>
           </div>
 
-          <div className={`p-6 rounded-xl shadow-lg border ${
-            isDarkMode ? 'bg-gray-800 border-green-950' : 'bg-white border-green-200'
-          } mb-6`}>
+          <div className={`p-6 rounded-xl shadow-lg border mb-6 ${
+            isDarkMode 
+              ? 'bg-gray-800/50 border-green-900' 
+              : 'bg-white/70 border-green-200'
+          }`}>
             <div className="flex justify-between items-center mb-4">
-              <h3 className={`text-xl font-semibold ${isDarkMode ? 'text-green-200' : 'text-green-900'}`}>보유 포인트</h3>
-              <p className={`text-2xl font-bold ${isDarkMode ? 'text-green-200' : 'text-green-900'}`}>
+              <h3 className={`text-xl font-semibold ${
+                isDarkMode ? 'text-green-200' : 'text-green-900'
+              }`}>보유 포인트</h3>
+              <p className={`text-2xl font-bold ${
+                isDarkMode ? 'text-green-200' : 'text-green-900'
+              }`}>
                 {totalPoints.toLocaleString()} P
               </p>
             </div>
-            <p className={`text-sm mt-2 text-right ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>
+            <p className={`text-sm mt-2 text-right ${
+              isDarkMode ? 'text-gray-400' : 'text-gray-500'
+            }`}>
               현재 보유 포인트: {totalPoints.toLocaleString()} P
             </p>
           </div>
@@ -73,7 +86,9 @@ export default function PointsPage() {
           <div className={`p-6 rounded-xl shadow-lg border ${
             isDarkMode ? 'bg-gray-800 border-green-950' : 'bg-white border-green-200'
           }`}>
-            <h3 className={`text-xl font-semibold mb-4 ${isDarkMode ? 'text-green-200' : 'text-green-900'}`}>포인트 내역</h3>
+            <h3 className={`text-xl font-semibold mb-4 ${
+              isDarkMode ? 'text-green-200' : 'text-green-900'
+            }`}>포인트 내역</h3>
             <div className="space-y-4">
               {pointHistory.map((history, index) => (
                 <div

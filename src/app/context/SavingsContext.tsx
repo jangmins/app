@@ -18,6 +18,7 @@ interface MonthlySaving {
 interface SavingsContextType {
   monthlySavings: MonthlySaving[];
   addSaving: (item: SavingItem) => void;
+  totalSaved: number;
 }
 
 const SavingsContext = createContext<SavingsContextType | undefined>(undefined);
@@ -27,48 +28,46 @@ export function SavingsProvider({ children }: { children: ReactNode }) {
     {
       month: '2024-03',
       savedAmount: 500000,
-      goal: 600000,
+      goal: 1000000,
       items: [
-        { name: '커피 절약', amount: 150000, date: '2024-03-01' },
-        { name: '배달음식 절약', amount: 200000, date: '2024-03-02' },
-        { name: '간식 절약', amount: 150000, date: '2024-03-03' },
+        { name: '커피 절약', amount: 15000, date: '2024-03-15' },
+        { name: '배달음식 절약', amount: 20000, date: '2024-03-15' },
+        { name: '간식 절약', amount: 10000, date: '2024-03-14' },
       ],
-    },
-    {
-      month: '2024-02',
-      savedAmount: 600000,
-      goal: 500000,
-      items: [],
-    },
-    {
-      month: '2024-01',
-      savedAmount: 450000,
-      goal: 500000,
-      items: [],
-    },
+    }
   ]);
 
-  const addSaving = (newItem: SavingItem) => {
-    setMonthlySavings(prevSavings => {
-      const currentMonth = new Date().toISOString().slice(0, 7);
-      const updatedSavings = prevSavings.map(saving => {
-        if (saving.month === currentMonth) {
-          const updatedItems = [...saving.items, newItem];
-          const updatedAmount = updatedItems.reduce((sum, item) => sum + item.amount, 0);
-          return {
-            ...saving,
-            savedAmount: updatedAmount,
-            items: updatedItems,
-          };
-        }
-        return saving;
-      });
-      return updatedSavings;
+  const addSaving = (item: SavingItem) => {
+    const currentDate = new Date();
+    const currentMonth = `${currentDate.getFullYear()}-${String(currentDate.getMonth() + 1).padStart(2, '0')}`;
+    
+    setMonthlySavings(prev => {
+      const monthIndex = prev.findIndex(m => m.month === currentMonth);
+      if (monthIndex === -1) {
+        // 새로운 월 추가
+        return [...prev, {
+          month: currentMonth,
+          savedAmount: item.amount,
+          goal: 1000000,
+          items: [item]
+        }];
+      } else {
+        // 기존 월 업데이트
+        const newSavings = [...prev];
+        newSavings[monthIndex] = {
+          ...newSavings[monthIndex],
+          savedAmount: newSavings[monthIndex].savedAmount + item.amount,
+          items: [...newSavings[monthIndex].items, item]
+        };
+        return newSavings;
+      }
     });
   };
 
+  const totalSaved = monthlySavings.reduce((sum, month) => sum + month.savedAmount, 0);
+
   return (
-    <SavingsContext.Provider value={{ monthlySavings, addSaving }}>
+    <SavingsContext.Provider value={{ monthlySavings, addSaving, totalSaved }}>
       {children}
     </SavingsContext.Provider>
   );

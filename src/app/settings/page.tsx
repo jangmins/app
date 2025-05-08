@@ -18,51 +18,41 @@ export default function SettingsPage() {
   };
 
   return (
-    <div className={`min-h-screen pt-16 ${
+    <div className={`min-h-screen pt-20 ${
       isDarkMode 
-        ? 'bg-gradient-to-b from-gray-950 via-purple-950 to-gray-900' 
-        : 'bg-gradient-to-b from-purple-50 via-purple-100 to-white'
+        ? 'bg-gradient-to-b from-gray-950 via-gray-900 to-gray-950' 
+        : 'bg-gradient-to-b from-gray-100 via-gray-50 to-white'
     }`}>
       <Navbar />
       <main className="p-4">
         <div className="max-w-md mx-auto">
-          <h2 className={`text-2xl font-bold mb-6 ${isDarkMode ? 'text-purple-300' : 'text-purple-800'}`}>설정</h2>
-          
-          <div className={`p-6 rounded-xl shadow-lg border ${
-            isDarkMode ? 'bg-gray-800 border-purple-900' : 'bg-white border-purple-100'
-          } mb-6`}>
-            <h3 className={`text-xl font-semibold mb-4 ${isDarkMode ? 'text-purple-300' : 'text-purple-700'}`}>앱 설정</h3>
+          <div className="p-6 rounded-xl shadow-lg border bg-white border-gray-200 mb-6">
+            <h3 className="text-xl font-semibold mb-4 text-gray-900">앱 설정</h3>
             
-            <div className="mb-4">
+            <div className="mb-4 pb-4 border-b border-gray-200">
               <div className="flex justify-between items-center">
-                <span className={`${isDarkMode ? 'text-purple-200' : 'text-purple-800'}`}>앱 제목</span>
+                <span className="text-gray-900">앱 제목</span>
                 {isEditingTitle ? (
                   <div className="flex gap-2">
                     <input
                       type="text"
                       value={newTitle}
                       onChange={(e) => setNewTitle(e.target.value)}
-                      className={`px-3 py-1 rounded-lg border ${
-                        isDarkMode ? 'bg-gray-700 border-purple-800 text-white' : 'bg-white border-purple-300 text-gray-800'
-                      }`}
+                      className="px-3 py-1 rounded-lg border bg-white border-gray-300 text-gray-900"
                     />
                     <button
                       onClick={handleTitleSave}
-                      className={`px-3 py-1 rounded-lg ${
-                        isDarkMode ? 'bg-green-600 text-white hover:bg-green-700' : 'bg-green-500 text-white hover:bg-green-600'
-                      }`}
+                      className="px-3 py-1 rounded-lg bg-gray-200 text-gray-900 hover:bg-gray-300"
                     >
                       저장
                     </button>
                   </div>
                 ) : (
                   <div className="flex items-center gap-2">
-                    <span className={`${isDarkMode ? 'text-purple-300' : 'text-purple-600'}`}>{appTitle}</span>
+                    <span className="text-gray-900">{appTitle}</span>
                     <button
                       onClick={() => setIsEditingTitle(true)}
-                      className={`px-3 py-1 rounded-lg ${
-                        isDarkMode ? 'bg-purple-800 text-white hover:bg-purple-900' : 'bg-purple-100 text-purple-800 hover:bg-purple-200'
-                      }`}
+                      className="px-3 py-1 rounded-lg bg-gray-200 text-gray-900 hover:bg-gray-300"
                     >
                       수정
                     </button>
@@ -71,55 +61,38 @@ export default function SettingsPage() {
               </div>
             </div>
 
-            <div className="flex justify-between items-center">
-              <span className={`${isDarkMode ? 'text-purple-200' : 'text-purple-800'}`}>다크 모드</span>
-              <button
-                onClick={toggleDarkMode}
-                className={`px-4 py-2 rounded-xl font-semibold ${
-                  isDarkMode ? 'bg-purple-800 text-white hover:bg-purple-900' : 'bg-purple-100 text-purple-800 hover:bg-purple-200'
-                }`}
-              >
-                {isDarkMode ? '라이트 모드로 전환' : '다크 모드로 전환'}
-              </button>
-            </div>
-          </div>
-
-          <div className={`p-6 rounded-xl shadow-lg border ${
-            isDarkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'
-          } mb-6`}>
-            <h2 className={`text-xl font-semibold mb-4 ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>앱 설정</h2>
-            
-            <div className="space-y-6">
-              {/* 알림 설정 */}
-              <div className="flex items-center justify-between">
+            <div className="space-y-4">
+              <div className="flex justify-between items-center">
                 <div>
-                  <h3 className={`text-lg font-medium ${isDarkMode ? 'text-gray-200' : 'text-gray-800'}`}>저축 목표 달성 알림</h3>
-                  <p className={`text-sm ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>목표 달성 시 알림을 받습니다</p>
+                  <span className="text-gray-900 block">알림 설정</span>
+                  <span className="text-gray-600 text-sm">저축 목표 달성 및 포인트 적립 알림</span>
+                </div>
+                <label className="relative inline-flex items-center cursor-pointer">
+                  <input type="checkbox" className="sr-only peer" />
+                  <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-gray-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-gray-600"></div>
+                </label>
+              </div>
+
+              <div className="flex justify-between items-center">
+                <div>
+                  <span className="text-gray-900 block">다크 모드</span>
+                  <span className="text-gray-600 text-sm">어두운 테마로 전환</span>
                 </div>
                 <button
-                  onClick={() => setNotifications(!notifications)}
-                  className={`relative inline-flex h-6 w-16 items-center rounded-full transition-colors ${
-                    notifications ? 'bg-blue-600' : 'bg-gray-200'
-                  }`}
+                  onClick={toggleDarkMode}
+                  className="relative inline-flex items-center cursor-pointer"
                 >
-                  <span
-                    className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
-                      notifications ? 'translate-x-11' : 'translate-x-1'
-                    }`}
-                  />
-                  <span className={`absolute text-xs font-medium ${notifications ? 'text-white left-2' : 'text-gray-500 right-2'}`}>
-                    {notifications ? 'ON' : 'OFF'}
-                  </span>
+                  <div className={`w-11 h-6 ${isDarkMode ? 'bg-gray-600' : 'bg-gray-200'} rounded-full relative`}>
+                    <div className={`absolute top-[2px] ${isDarkMode ? 'right-[2px]' : 'left-[2px]'} bg-white border-gray-300 border rounded-full h-5 w-5 transition-all`}></div>
+                  </div>
                 </button>
               </div>
             </div>
           </div>
 
-          <div className={`p-6 rounded-xl shadow-lg border ${
-            isDarkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'
-          }`}>
-            <h2 className={`text-xl font-semibold mb-4 ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>앱 정보</h2>
-            <div className={`space-y-2 ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>
+          <div className="p-6 rounded-xl shadow-lg border bg-white border-gray-200">
+            <h2 className="text-xl font-semibold mb-4 text-gray-900">앱 정보</h2>
+            <div className="space-y-2 text-gray-900">
               <p className="text-sm">티끌모아태산 v1.0.0</p>
               <p className="text-sm">© 2024 티끌모아태산. All rights reserved.</p>
             </div>
